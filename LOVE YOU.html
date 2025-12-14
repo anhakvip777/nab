@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Website Tỏ Tình 💘🎄</title>
+    <meta name="description" content="Trang web tỏ tình có tim bay, confetti và nhạc nền Giáng Sinh." />
+
+    <style>
+         :root {
+            --bg1: #ffdde1;
+            --bg2: #ee9ca7;
+            --card: rgba(255, 255, 255, .62);
+            --text: #1f2937;
+            --muted: #6b7280;
+            --yes: #22c55e;
+            --yesH: #15803d;
+            --no: #ef4444;
+            --noH: #b91c1c;
+            --primary: #ff4d6d;
+            --primaryH: #e63956;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .15);
+            --radius: 18px;
+        }
+        
+        * {
+            box-sizing: border-box
+        }
+        
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: linear-gradient(120deg, var(--bg1), var(--bg2), #ffd6ff, #c8b6ff);
+            background-size: 400% 400%;
+            animation: bgMove 12s ease-in-out infinite;
+        }
+        
+        @keyframes bgMove {
+            0% {
+                background-position: 0% 50%
+            }
+            50% {
+                background-position: 100% 50%
+            }
+            100% {
+                background-position: 0% 50%
+            }
+        }
+        /* overlays MUST NOT block clicks */
+        
+        .hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 2;
+        }
+        
+        #confetti {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            display: none;
+        }
+        /* floating hearts */
+        
+        .heart {
+            position: absolute;
+            width: var(--s, 18px);
+            height: var(--s, 18px);
+            transform: rotate(45deg);
+            opacity: .75;
+            animation: floatUp linear infinite;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, .12));
+            background: rgba(255, 77, 109, .9);
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: var(--s, 18px);
+            height: var(--s, 18px);
+            background: rgba(255, 77, 109, .9);
+            border-radius: 50%;
+        }
+        
+        .heart::before {
+            left: calc(var(--s, 18px) / -2);
+            top: 0;
+        }
+        
+        .heart::after {
+            left: 0;
+            top: calc(var(--s, 18px) / -2);
+        }
+        
+        @keyframes floatUp {
+            from {
+                transform: translateY(110vh) rotate(45deg);
+                opacity: 0
+            }
+            10% {
+                opacity: .8
+            }
+            to {
+                transform: translateY(-20vh) rotate(45deg);
+                opacity: 0
+            }
+        }
+        
+        .wrap {
+            position: relative;
+            z-index: 3;
+            width: min(900px, 92vw);
+            margin: 24px auto 80px;
+        }
+        
+        .top-title {
+            text-align: center;
+            margin: 18px 0 10px;
+            font-weight: 800;
+        }
+        
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, .6);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px;
+            margin: 18px auto;
+            overflow: hidden;
+        }
+        
+        .section {
+            display: none
+        }
+        
+        .section.active {
+            display: block
+        }
+        
+        .valentine {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+        
+        .valentine img {
+            height: 210px;
+            user-select: none;
+        }
+        
+        .valentine h1 {
+            font-size: 2.1rem;
+            margin: 14px 0;
+        }
+        
+        .result-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 16px 0;
+        }
+        
+        .btn {
+            font-weight: bold;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: transform .12s ease, background .2s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px)
+        }
+        
+        .btn:active {
+            transform: translateY(1px) scale(.99)
+        }
+        
+        .yes-btn {
+            background: var(--yes);
+            color: #fff;
+            margin-right: 12px
+        }
+        
+        .yes-btn:hover {
+            background: var(--yesH)
+        }
+        
+        .no-btn {
+            background: var(--no);
+            color: #fff
+        }
+        
+        .no-btn:hover {
+            background: var(--noH)
+        }
+        
+        .primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .primary:hover {
+            background: var(--primaryH);
+        }
+        
+        .ghost {
+            background: rgba(31, 41, 55, .12);
+            color: var(--text);
+            box-shadow: none;
+            border: 1px solid rgba(31, 41, 55, .12);
+        }
+        
+        .shake {
+            animation: shake .35s ease;
+        }
+        
+        @keyframes shake {
+            0% {
+                transform: translateX(0)
+            }
+            25% {
+                transform: translateX(-5px)
+            }
+            50% {
+                transform: translateX(6px)
+            }
+            75% {
+                transform: translateX(-4px)
+            }
+            100% {
+                transform: translateX(0)
+            }
+        }
+        
+        .cta {
+            margin-top: 14px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, .08);
+            margin: 18px 0;
+        }
+        
+        .muted {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .page {
+            max-width: 680px;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .dish {
+            margin: 14px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+            padding: 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, .05);
+            background: rgba(255, 255, 255, .65);
+        }
+        
+        .dish img {
+            width: 92px;
+            height: 92px;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+        
+        input[type="date"],
+        input[type="time"],
+        input[type="text"] {
+            padding: 10px 12px;
+            font-size: 16px;
+            margin: 10px 0;
+            width: min(360px, 92%);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, .15);
+            outline: none;
+        }
+        
+        ul {
+            text-align: left;
+            display: inline-block;
+            padding-left: 18px;
+        }
+        /* music icon button */
+        
+        #musicToggle {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 9999;
+            font-size: 20px;
+            border: none;
+            border-radius: 999px;
+            padding: 10px 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+        }
+        
+        #confirmMon {
+            list-style: none;
+            /* xoá bullet */
+            margin: 0;
+            padding: 0;
+        }
+        
+        #confirmMon li {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 🎄 Music (use local file kk.mp3 in same folder) -->
+    <audio id="bgMusic" loop preload="auto">
+    <source src="kk.mp3" type="audio/mpeg">
+  </audio>
+
+    <!-- 🔊 icon -->
+    <button id="musicToggle" type="button">🔇</button>
+
+    <canvas id="confetti"></canvas>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="wrap">
+        <h1 class="top-title">💘 Một trang web nhỏ để mời em đi chơi 🎄</h1>
+
+        <!-- SECTION 1 -->
+        <div class="card section active" id="sectionValentine">
+            <div class="valentine">
+                <div class="container" id="app">
+                    <img id="mainImage" src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="cute bear" />
+
+                    <h1 id="question">You're the only gift I need this Christmas. Would you like to spend it with me?</h1>
+
+                    <div id="buttons">
+                        <button class="btn yes-btn" id="yesBtn" type="button">Yes</button>
+                        <button class="btn no-btn" id="noBtn" type="button">No</button>
+                    </div>
+
+                    <div class="cta">
+                        <button class="btn primary" id="goFoodBtn" type="button" style="display:none;">Tiếp tục nào 🍽️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="card section" id="sectionFood">
+            <h1>Xin chào Yến Nhi Cute của Anh ❤️❤️❤️</h1>
+            <div class="divider"></div>
+
+            <!-- Page 1: date & time -->
+            <div id="page1" class="page active">
+                <h2>Xin mời em chọn thời gian nà 😘😘😘</h2>
+
+                <label for="ngay">Ngày:</label><br />
+                <input type="date" id="ngay" name="ngay" required />
+
+                <br><br>
+
+                <label for="gio">Giờ:</label><br />
+                <input type="time" id="gio" name="gio" required />
+
+                <br /><br />
+                <button class="btn primary" id="btnNext" type="button">Đồng Ý</button>
+                <p class="muted">* Anh để mặc định là 25-12-2025, em có thể thay đổi nếu muốn nha !!!.</p>
+            </div>
+
+            <!-- Page 2 -->
+            <div id="page2" class="page">
+                <h2>Chọn Món Ăn</h2>
+                <p>Chọn món rồi bấm <b>Tiếp tục</b> để xác nhận.</p>
+
+                <!-- Nếu dùng Formspree: thay your-form-id -->
+                <form id="foodForm" action="https://formspree.io/f/xblnbdor" method="POST">
+                    <input type="hidden" name="ngay" id="hiddenNgay" />
+                    <input type="hidden" name="gio" id="hiddenGio" />
+
+
+                    <div class="dish">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2M7Vi6_7jVVx7XJT7oXU8-5af0XyYUJb7-g&s" alt="Gogi" />
+                        <div><input type="checkbox" name="mon-an" value="Gogi" /> Gogi</div>
+                    </div>
+
+                    <div class="dish">
+                        <img src="https://i-giadinh.vnecdn.net/2025/05/16/Bun-dau-mam-tom-6-vnexpress-17-9082-8722-1747388531.jpg" alt="Bún Đậu" />
+                        <div><input type="checkbox" name="mon-an" value="Bún Đậu" /> Bún Đậu</div>
+                    </div>
+
+                    <div class="dish">
+                        <img src="https://aeonmall-review-rikkei.cdn.vccloud.vn/public/wp/15/editors/B3SXPzpBLMDjhCErPvNiTXv7ukNW1fPTR2JuJOvs.jpg" alt="Dokki" />
+                        <div><input type="checkbox" name="mon-an" value="Dokki" /> Dokki</div>
+                    </div>
+
+                    <div class="dish">
+                        <img src="https://file.hstatic.net/200000303304/article/steak_10_b1b1397477ea4c8ca1f215989632a614_1024x1024.jpg" alt="Beef steak" />
+                        <div><input type="checkbox" name="mon-an" value="Beef steak" /> Beef steak (ở Tila hihi )</div>
+                    </div>
+
+                    <div class="dish">
+                        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=100&h=100&fit=crop" alt="Sushi" />
+                        <div><input type="checkbox" name="mon-an" value="Sushi" /> Sushi</div>
+                    </div>
+
+                    <div class="dish">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=100&h=100&fit=crop" alt="Đồ Nướng ở quận 5 hôm bữa ý ý" />
+                        <div><input type="checkbox" name="mon-an" value="Đồ Nướng ở quận 5 hôm bữa ý ý" /> Đồ Nướng ở quận 5 hôm bữa ý ý </div>
+                    </div>
+
+                    <label for="ten">Em có muốn ghi chú gì thêm hăm (Ví dụ em muốn đi ăn ở đâu...) 😁😁😁:</label><br />
+                    <input type="text" id="ten" name="ten" required placeholder="Viết vào đây nà..." />
+
+                    <br />
+                    <button class="btn no-btn" id="btnPrev" type="button">Quay Lại</button>
+                    <button class="btn primary" id="btnToConfirm" type="button">Tiếp Tục</button>
+                </form>
+            </div>
+
+            <!-- Page 3: confirm -->
+            <div id="page3" class="page">
+                <h2>💌 Xác Nhận</h2>
+                <p><b>Ngày:</b> <span id="confirmNgay"></span></p>
+                <p><b>Giờ:</b> <span id="confirmGio"></span></p>
+                <p><b>Ghi chú</b> <span id="confirmTen"></span></p>
+                <div class="confirm-row">
+                    <b>Món:</b>
+                    <ul id="confirmMon"></ul>
+                </div>
+
+                <button class="btn no-btn" id="btnBackFood" type="button">Quay Lại</button>
+                <button class="btn primary" id="btnSubmit" type="button">Xác Nhận & Gửi</button>
+            </div>
+
+            <!-- Page 4 -->
+            <div id="page4" class="page">
+                <h2>🥰 Cảm ơn em!</h2>
+                <p>Anh nhận được rồi ❤️</p>
+                <button class="btn ghost" id="btnTop" type="button">Quay lại đầu trang ⬆️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            /* ✅ format YYYY-MM-DD -> dd/mm/yy */
+            function formatDateDDMMYY(isoDate) {
+                if (!isoDate) return "";
+                const [y, m, d] = isoDate.split("-");
+                return `${d}/${m}/${y.slice(2)}`;
+            }
+
+            /* 🎄 MUSIC: start on first touch/click + toggle icon */
+            const bgMusic = document.getElementById("bgMusic");
+            const musicToggle = document.getElementById("musicToggle");
+            let musicStarted = false;
+            let musicOn = false;
+
+            function setIcon() {
+                musicToggle.textContent = musicOn ? "🔊" : "🔇";
+            }
+
+            function startMusicOnce() {
+                if (musicStarted) return;
+                bgMusic.volume = 0.5;
+                bgMusic.play().then(() => {
+                    musicStarted = true;
+                    musicOn = true;
+                    setIcon();
+                }).catch(() => {
+                    // if blocked, user can tap the icon
+                });
+            }
+
+            document.addEventListener("click", startMusicOnce, {
+                once: true
+            });
+            document.addEventListener("touchstart", startMusicOnce, {
+                once: true
+            });
+
+            musicToggle.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (!musicOn) {
+                    bgMusic.volume = 0.5;
+                    bgMusic.play().catch(() => {});
+                    musicOn = true;
+                    musicStarted = true;
+                } else {
+                    bgMusic.pause();
+                    musicOn = false;
+                }
+                setIcon();
+            });
+
+            /* ❤️ HEARTS */
+            const heartsWrap = document.getElementById('hearts');
+
+            function spawnHeart() {
+                const h = document.createElement('div');
+                h.className = 'heart';
+                const left = Math.random() * 100;
+                const dur = 6 + Math.random() * 7;
+                const delay = Math.random() * 2;
+                const size = 10 + Math.random() * 16;
+
+                h.style.left = left + 'vw';
+                h.style.animationDuration = dur + 's';
+                h.style.animationDelay = delay + 's';
+                h.style.setProperty('--s', size + 'px');
+
+                heartsWrap.appendChild(h);
+                setTimeout(() => h.remove(), (dur + delay) * 1000);
+            }
+            setInterval(spawnHeart, 350);
+
+            /* 🎉 CONFETTI */
+            const confettiCanvas = document.getElementById('confetti');
+            const ctx = confettiCanvas.getContext('2d');
+            let confettiPieces = [];
+            let running = false;
+
+            function resize() {
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            function startConfetti(ms = 1400) {
+                confettiCanvas.style.display = 'block';
+                running = true;
+                confettiPieces = Array.from({
+                    length: 120
+                }, () => ({
+                    x: Math.random() * confettiCanvas.width,
+                    y: -20 - Math.random() * 200,
+                    w: 6 + Math.random() * 8,
+                    h: 6 + Math.random() * 12,
+                    vx: -2 + Math.random() * 4,
+                    vy: 2 + Math.random() * 6,
+                    rot: Math.random() * Math.PI,
+                    vr: -0.2 + Math.random() * 0.4,
+                    a: 0.95,
+                    hue: Math.random() * 360
+                }));
+
+                const start = performance.now();
+
+                function tick(t) {
+                    if (!running) return;
+                    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+                    confettiPieces.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.rot += p.vr;
+                        p.vy += 0.03;
+                        p.a = Math.max(0, p.a - 0.003);
+
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate(p.rot);
+                        ctx.globalAlpha = p.a;
+                        ctx.fillStyle = `hsl(${p.hue},85%,65%)`;
+                        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                        ctx.restore();
+                    });
+
+                    confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 40 && p.a > 0.05);
+
+                    if (t - start < ms) requestAnimationFrame(tick);
+                    else {
+                        running = false;
+                        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                        confettiCanvas.style.display = 'none';
+                    }
+                }
+                requestAnimationFrame(tick);
+            }
+
+            /* SECTION SWITCH */
+            const sectionValentine = document.getElementById('sectionValentine');
+            const sectionFood = document.getElementById('sectionFood');
+            const goFoodBtn = document.getElementById('goFoodBtn');
+
+            function showFood() {
+                sectionValentine.classList.remove('active');
+                sectionFood.classList.add('active');
+                sectionFood.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            goFoodBtn.addEventListener('click', showFood);
+
+            /* 💘 VALENTINE */
+            let noCount = 0;
+            const phrases = [
+                "No", "Are you sure?", "Really sure?", "Think again!", "Last chance!",
+                "Surely not?", "You might regret this!", "Give it another thought!",
+                "Are you absolutely certain?", "This could be a mistake!", "Have a heart!",
+                "Don't be so cold!", "Change of heart?", "Wouldn't you reconsider?",
+                "Is that your final answer?", "You're breaking my heart ;("
+            ];
+
+            const yesBtn = document.getElementById("yesBtn");
+            const noBtn = document.getElementById("noBtn");
+            const question = document.getElementById("question");
+            const mainImage = document.getElementById("mainImage");
+            const buttons = document.getElementById("buttons");
+
+            yesBtn.addEventListener("click", () => {
+                mainImage.src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
+                question.textContent = "Ok yay!!! 💖";
+                question.className = "result-text";
+                buttons.style.display = "none";
+                goFoodBtn.style.display = "inline-block";
+                startConfetti(1600);
+                startMusicOnce(); // ensure music starts on YES too
+            });
+
+            noBtn.addEventListener("click", () => {
+                noCount++;
+                yesBtn.style.fontSize = (16 + noCount * 14) + "px";
+                noBtn.textContent = phrases[Math.min(noCount, phrases.length - 1)];
+                noBtn.classList.remove("shake");
+                void noBtn.offsetWidth;
+                noBtn.classList.add("shake");
+            });
+
+            /* 🍽️ FOOD FLOW */
+            const page1 = document.getElementById("page1");
+            const page2 = document.getElementById("page2");
+            const page3 = document.getElementById("page3");
+            const page4 = document.getElementById("page4");
+
+            const ngay = document.getElementById("ngay");
+            const gio = document.getElementById("gio");
+            const hiddenNgay = document.getElementById("hiddenNgay");
+            const hiddenGio = document.getElementById("hiddenGio");
+            const ten = document.getElementById("ten");
+
+            // ✅ preset date 25/12/2025 + preset time (optional)
+            ngay.value = "2025-12-25";
+            gio.value = "19:00";
+
+            document.getElementById("btnNext").addEventListener("click", () => {
+                if (!ngay.value) {
+                    alert("Vui lòng chọn ngày!");
+                    return;
+                }
+                if (!gio.value) {
+                    alert("Vui lòng chọn giờ!");
+                    return;
+                }
+
+                hiddenNgay.value = ngay.value;
+                hiddenGio.value = gio.value;
+
+                page1.classList.remove("active");
+                page2.classList.add("active");
+            });
+
+            document.getElementById("btnPrev").addEventListener("click", () => {
+                page2.classList.remove("active");
+                page1.classList.add("active");
+            });
+
+            document.getElementById("btnToConfirm").addEventListener("click", () => {
+                const checked = document.querySelectorAll('input[name="mon-an"]:checked');
+
+                if (checked.length === 0) {
+                    alert("Vui lòng chọn ít nhất 1 món!");
+                    return;
+                }
+
+                // show dd/mm/yy
+                document.getElementById("confirmNgay").textContent = formatDateDDMMYY(hiddenNgay.value);
+                document.getElementById("confirmGio").textContent = hiddenGio.value;
+                document.getElementById("confirmTen").textContent = ten.value.trim();
+
+                const ul = document.getElementById("confirmMon");
+                ul.innerHTML = "";
+                checked.forEach(x => {
+                    const li = document.createElement("li");
+                    li.textContent = x.value;
+                    ul.appendChild(li);
+                });
+
+                page2.classList.remove("active");
+                page3.classList.add("active");
+            });
+
+            document.getElementById("btnBackFood").addEventListener("click", () => {
+                page3.classList.remove("active");
+                page2.classList.add("active");
+            });
+
+            document.getElementById("btnSubmit").addEventListener("click", () => {
+                document.getElementById("foodForm").submit();
+                page3.classList.remove("active");
+                page4.classList.add("active");
+                startConfetti(1200);
+            });
+
+            document.getElementById("btnTop").addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+                sectionFood.classList.remove("active");
+                sectionValentine.classList.add("active");
+            });
+        });
+    </script>
+</body>
+
+</html>
